@@ -6,10 +6,11 @@
 
 
 ##### Params
+----
 - url
     - 完整的请求地址
 - data
-    - 发送的数据 .eg: { ... }
+    - 数据 .eg: { ... }
 - method
     - 方式 .eg: get、post、put...
 - request - headers
@@ -19,7 +20,7 @@
     - 接收完响应后的处理
     - 目前包含字段: "Content-Type"、"handle"
         - "Content-Type" 检查响应内容的格式是否符合发起方要求
-            - 默认 "", 无论返回什么格式都允许通过检查
+            - 默认 "", 任何格式都允许通过检查
         - "handle" requests执行完成后只返回响应体结果, 此字段接收一个函数, 增强处理响应头的功能
             - 默认 (data, res) => data
             
