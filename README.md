@@ -8,16 +8,20 @@
 ##### Params
 ----
 - url
-    - 完整的请求地址
+    - 必填, 完整的请求地址
+    <br />
 - data
-    - 数据 .eg: { ... }
+    - 选填, 数据 .eg: { ... }
+    <br />
 - method
-    - 方式 .eg: get、post、put...
+    - 选填, 方式 .eg: get、post、put...
+    <br />
 - request - headers
-    - 发起请求的请求头
+    - 选填, 发起请求的请求头
     - 默认 { "Content-Type": "application/json" }
+    <br />
 - handler - response data
-    - 接收完响应后的处理
+    - 选填, 接收完响应后的处理
     - 目前包含字段: "Content-Type"、"handle"
         - "Content-Type" 检查响应内容的格式是否符合发起方要求
             - 默认 "", 任何格式都允许通过检查
