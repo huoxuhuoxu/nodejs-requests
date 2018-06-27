@@ -124,6 +124,38 @@ describe ("测试requests - post", () => {
 
 });
 
+describe ("测试其他", () => {
+
+    it ("超时测试", (done) => {
+        (async () => {
+            const url = service.get("get/timeout_test");
+            try {
+                await requests(url, {}, "GET", undefined, {
+                    timeout: 1000
+                });
+            } catch(err){
+                assert(err === "request timeout", "timeout invalid");
+                done();
+            }
+        })();
+    });
+
+    it ("超时测试2", (done) => {
+        (async () => {
+            const url = service.get("get/timeout_test2");
+            try {
+                let ret = await requests(url, {}, "GET", undefined, {
+                    timeout: 1000
+                });
+                assert(ret === "OK", "content error");
+                done();
+            } catch(err){
+                console.log(err);
+            }
+        })();
+    });
+
+});
 
 describe ("结束", () => {
 

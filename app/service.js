@@ -13,6 +13,20 @@ const router = new Router();
 
 app.use(bodyParser());
 
+router.get("/get/timeout_test", async ctx => {
+    await new Promise(resolve => {
+        setTimeout(resolve, 20000);
+    });
+    ctx.body = "OK";
+});
+router.get("/get/timeout_test2", async ctx => {
+    await new Promise(resolve => {
+        setTimeout(resolve, 500);
+    });
+    ctx.body = "OK";
+});
+
+
 router.get("/get/common_test", ctx => {
     ctx.body = { errcode: 0, msg: "OK" };
 });

@@ -24,11 +24,13 @@
     <br />
 - handler - response data
     - 选填, 接收完响应后的处理
-    - 目前包含字段: "Content-Type"、"handle"
+    - 目前包含字段: "Content-Type"、"handle"、"timeout"
         - "Content-Type" 检查响应内容的格式是否符合发起方要求
             - 默认 "", 任何格式都允许通过检查
         - "handle" requests执行完成后只返回响应体结果, 此字段接收一个函数, 增强处理响应头的功能
             - 默认 (data, res) => data
+        - "timeout" 设置请求的超时时间
+            - 默认 10000ms
     <br />
 
 >   注:

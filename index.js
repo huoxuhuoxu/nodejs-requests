@@ -10,6 +10,7 @@ const https = require("https");
 const url = require("url");
 const assert = require("assert");
 
+const timeout = 10000;
 
 /**
  * @description
@@ -21,7 +22,7 @@ const assert = require("assert");
  * 
  * @return Promise
  */
-const get = async (protocol, url, callback) => {
+const get = (protocol, url, callback) => {
     return new Promise((resolve, reject) => {
         protocol.get(url, callback.bind(null, resolve, reject))
                 .on("error", (e) => {
@@ -43,7 +44,7 @@ const get = async (protocol, url, callback) => {
  * 
  * @return Promise
  */
-const post = async (protocol, options, data, callback) => {
+const post = (protocol, options, data, callback) => {
     return new Promise((resolve, reject) => {
         const req = protocol.request(options, callback.bind(null, resolve, reject));
         req.on("error", (e) => { reject(e); });
@@ -129,10 +130,7 @@ const callback = async (response_handle, resolve, reject, res) => {
         if (handle && typeof handle === "function") data = await handle(data, res);
         resolve(data);
     });
-    res.on("error", (e) => {
-        console.error("[error] 错误: ", error.message);
-        reject(e);
-    });
+    
 };
 
 
@@ -155,11 +153,12 @@ const callback = async (response_handle, resolve, reject, res) => {
  * @return Promise
  */
 
-module.exports = async (real_url, body = {}, method = "GET",
+module.exports = (real_url, body = {}, method = "GET",
     headers = {
         "Content-Type": ""
     },
     response_handle = {
+        timeout,
         "Content-Type": "",
         "handle": (data, res) => data
     }
@@ -175,22 +174,31 @@ module.exports = async (real_url, body = {}, method = "GET",
 
     const cb = callback.bind(null, response_handle);
 
-    if (method.toLowerCase() === "get") {
+    return new Promise(async (resolve, reject) => {
 
-        if (JSON.stringify(body) === "{}" || !body){
-            return await get(protocol, real_url, cb);
-        } 
+        let timer = setTimeout(() => {
+            clearTimeout(timer);
+            timer = null;
+            reject("request timeout");
+        }, response_handle.timeout || timeout);
 
-        let search = "";
-        for (let [k, v] of Object.entries(body)){
-            search += `&${k}=${v}`;
-        }
-        return await get(protocol, `${url_info.protocol}//${url_info.host}${url_info.pathname}?${search.substr(1)}`, cb);
+        if (method.toLowerCase() === "get") {
+
+            if (JSON.stringify(body) === "{}" || !body){
+                return resolve(await get(protocol, real_url, cb));
+            } 
     
-    }
-
-    const [ options, data ] = getOptions(url_info, body, method, headers);
-    return await post(protocol, options, data, cb);
+            let search = "";
+            for (let [k, v] of Object.entries(body)){
+                search += `&${k}=${v}`;
+            }
+            return resolve(await get(protocol, `${url_info.protocol}//${url_info.host}${url_info.pathname}?${search.substr(1)}`, cb));
+        
+        }
+    
+        const [ options, data ] = getOptions(url_info, body, method, headers);
+        return resolve(await post(protocol, options, data, cb));
+    });
 
 }; 
 
