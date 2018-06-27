@@ -28,6 +28,7 @@
         - "handle" requests执行完成后只返回响应体结果, 此字段接收一个函数, 增强处理响应头的功能
             - 默认 (data, res) => data
             
+    注: request, handler 参数只有在非GET方式下才有效
 
 
 ##### Download Page
