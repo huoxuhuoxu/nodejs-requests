@@ -155,6 +155,20 @@ describe ("测试其他", () => {
         })();
     });
 
+    it ("timeout字段类型测试", (done) => {
+        (async () => {
+            const url = service.get("get/timeout_test2");
+            try {
+                let ret = await requests(url, {}, "GET", undefined, {
+                    timeout: "1000"
+                });
+            } catch(err){
+                assert(err.message === "timeout must be a number type", "type testing failure");
+                done();
+            }
+        })();
+    });
+
 });
 
 describe ("结束", () => {

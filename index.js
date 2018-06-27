@@ -10,7 +10,7 @@ const https = require("https");
 const url = require("url");
 const assert = require("assert");
 
-const timeout = 10000;
+const request_timeout = 10000;
 
 /**
  * @description
@@ -158,9 +158,9 @@ module.exports = (real_url, body = {}, method = "GET",
         "Content-Type": ""
     },
     response_handle = {
-        timeout,
-        "Content-Type": "",
-        "handle": (data, res) => data
+        timeout: request_timeout,
+        handle: data => data,
+        "Content-Type": ""
     }
 ) => {
 
@@ -168,6 +168,9 @@ module.exports = (real_url, body = {}, method = "GET",
 
     const url_info = url.parse(real_url);
     assert(/https?:/.test(url_info.protocol), "origin-format error, can only be http, https");
+
+    const timeout = response_handle.timeout || request_timeout;
+    assert(!Number.isNaN(timeout) && Object.prototype.toString.call(timeout) === "[object Number]", "timeout must be a number type");
 
     let protocol = http;
     /^https/.test(url_info.protocol) && (protocol = https);
@@ -180,7 +183,7 @@ module.exports = (real_url, body = {}, method = "GET",
             clearTimeout(timer);
             timer = null;
             reject("request timeout");
-        }, response_handle.timeout || timeout);
+        }, timeout);
 
         if (method.toLowerCase() === "get") {
 

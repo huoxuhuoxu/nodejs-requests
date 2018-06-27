@@ -1,6 +1,6 @@
 {
   "name": "nodejs-requests",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "nodeJs, requests, https, http",
   "main": "index.js",
   "scripts": {
