@@ -12,9 +12,11 @@
     <br />
 - data
     - 选填, 数据 .eg: { ... }
+    - 默认 {}
     <br />
 - method
     - 选填, 方式 .eg: get、post、put...
+    - 默认 GET
     <br />
 - request - headers
     - 选填, 发起请求的请求头
@@ -27,8 +29,10 @@
             - 默认 "", 任何格式都允许通过检查
         - "handle" requests执行完成后只返回响应体结果, 此字段接收一个函数, 增强处理响应头的功能
             - 默认 (data, res) => data
-            
-    注: request, handler 参数只有在非GET方式下才有效
+    <br />
+
+>   注:
+>   request, handler 参数只有在非GET方式下才有效
 
 
 ##### Download Page
